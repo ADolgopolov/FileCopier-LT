@@ -11,30 +11,58 @@ namespace FileCopier
     {
         public static async Task CopyFilesInRangeAsync(string sourceDir, int startIndex, int endIndex, ProgressBar progressBar, Label progressLabel)
         {
-            progressLabel.Invoke((MethodInvoker)delegate { progressLabel.Text = "Please, wait..."; });
-
-            for (int currentCopedFileIndex = startIndex; currentCopedFileIndex <= endIndex; currentCopedFileIndex++)
+            try
             {
-                Application.DoEvents(); // Оновлення інтерфейсу
-                string sourceFileName = CreateFileName(currentCopedFileIndex);
+                progressLabel.Invoke((MethodInvoker)delegate { progressLabel.Text = "Please, wait..."; });
 
-                foreach (var subDir in new[] { "Forward", "Rear", "Left", "Right" })
+                if (endIndex < startIndex)
                 {
-                    string filePath = Path.Combine(sourceDir, subDir, sourceFileName);
-
-                    if (File.Exists(filePath))
+                    for (int currentCopedFileIndex = startIndex; currentCopedFileIndex >= endIndex; currentCopedFileIndex--)
                     {
-                        await ToRead(filePath);
+                        Application.DoEvents(); // Оновлення інтерфейсу
+                        string sourceFileName = CreateFileName(currentCopedFileIndex);
 
-                        progressLabel.Invoke((MethodInvoker)delegate { progressLabel.Text = Path.Combine(sourceDir, "{DIRECTION}", sourceFileName); });
-                        progressBar.Invoke((MethodInvoker)delegate { progressBar.Value = currentCopedFileIndex; });
+                        foreach (var subDir in new[] { "Forward", "Rear", "Left", "Right" })
+                        {
+                            string filePath = Path.Combine(sourceDir, subDir, sourceFileName);
+
+                            if (File.Exists(filePath))
+                            {
+                                await ToRead(filePath);
+
+                                progressLabel.Invoke((MethodInvoker)delegate { progressLabel.Text = Path.Combine(sourceDir, "{DIRECTION}", sourceFileName); });
+                                progressBar.Invoke((MethodInvoker)delegate { progressBar.Value = endIndex + (startIndex - currentCopedFileIndex); });
+                            }
+                        }
                     }
                 }
-            }
+                else
+                {
+                    for (int currentCopedFileIndex = startIndex; currentCopedFileIndex <= endIndex; currentCopedFileIndex++)
+                    {
+                        Application.DoEvents(); // Оновлення інтерфейсу
+                        string sourceFileName = CreateFileName(currentCopedFileIndex);
 
-            //MessageBox.Show("Google Drive complete to swape files.", "Close this window...", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            progressBar.Invoke((MethodInvoker)delegate { progressBar.Value = progressBar.Minimum; });
-            progressLabel.Invoke((MethodInvoker)delegate { progressLabel.Text = String.Empty; });
+                        foreach (var subDir in new[] { "Forward", "Rear", "Left", "Right" })
+                        {
+                            string filePath = Path.Combine(sourceDir, subDir, sourceFileName);
+
+                            if (File.Exists(filePath))
+                            {
+                                await ToRead(filePath);
+
+                                progressLabel.Invoke((MethodInvoker)delegate { progressLabel.Text = Path.Combine(sourceDir, "{DIRECTION}", sourceFileName); });
+                                progressBar.Invoke((MethodInvoker)delegate { progressBar.Value = currentCopedFileIndex; });
+                            }
+                        }
+                    }
+                }
+
+                //MessageBox.Show("Google Drive complete to swape files.", "Close this window...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                progressBar.Invoke((MethodInvoker)delegate { progressBar.Value = progressBar.Minimum; });
+                progressLabel.Invoke((MethodInvoker)delegate { progressLabel.Text = String.Empty; });
+            }
+            catch { Application.Exit(); }
         }
 
         private static string CreateFileName(int index) 

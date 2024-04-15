@@ -41,6 +41,8 @@
             folderBrowserDialogSource = new FolderBrowserDialog();
             folderBrowserDialogDestanation = new FolderBrowserDialog();
             labelProgress = new Label();
+            checkBox_AutoClose = new CheckBox();
+            label_PhotoAmount = new Label();
             ((System.ComponentModel.ISupportInitialize)numericUpDownStartIndex).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownEndIndex).BeginInit();
             SuspendLayout();
@@ -61,16 +63,16 @@
             textBoxSourceDir.Location = new Point(12, 33);
             textBoxSourceDir.Name = "textBoxSourceDir";
             textBoxSourceDir.ReadOnly = true;
-            textBoxSourceDir.Size = new Size(681, 29);
+            textBoxSourceDir.Size = new Size(747, 29);
             textBoxSourceDir.TabIndex = 1;
             textBoxSourceDir.TextAlign = HorizontalAlignment.Right;
             // 
             // buttonOpenSourceDir
             // 
             buttonOpenSourceDir.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            buttonOpenSourceDir.Location = new Point(699, 33);
+            buttonOpenSourceDir.Location = new Point(765, 30);
             buttonOpenSourceDir.Name = "buttonOpenSourceDir";
-            buttonOpenSourceDir.Size = new Size(158, 32);
+            buttonOpenSourceDir.Size = new Size(167, 32);
             buttonOpenSourceDir.TabIndex = 4;
             buttonOpenSourceDir.Text = "Open Run Folder";
             buttonOpenSourceDir.UseVisualStyleBackColor = true;
@@ -79,7 +81,7 @@
             // numericUpDownStartIndex
             // 
             numericUpDownStartIndex.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            numericUpDownStartIndex.Location = new Point(12, 77);
+            numericUpDownStartIndex.Location = new Point(13, 77);
             numericUpDownStartIndex.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             numericUpDownStartIndex.Name = "numericUpDownStartIndex";
             numericUpDownStartIndex.Size = new Size(80, 29);
@@ -89,18 +91,19 @@
             // numericUpDownEndIndex
             // 
             numericUpDownEndIndex.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            numericUpDownEndIndex.Location = new Point(302, 77);
+            numericUpDownEndIndex.Location = new Point(280, 77);
             numericUpDownEndIndex.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             numericUpDownEndIndex.Name = "numericUpDownEndIndex";
             numericUpDownEndIndex.Size = new Size(80, 29);
             numericUpDownEndIndex.TabIndex = 7;
             numericUpDownEndIndex.Value = new decimal(new int[] { 50, 0, 0, 0 });
+            numericUpDownEndIndex.ValueChanged += numericUpDownEndIndex_ValueChanged;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(98, 79);
+            label3.Location = new Point(99, 81);
             label3.Name = "label3";
             label3.Size = new Size(128, 21);
             label3.TabIndex = 8;
@@ -110,7 +113,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label4.Location = new Point(388, 79);
+            label4.Location = new Point(366, 81);
             label4.Name = "label4";
             label4.Size = new Size(122, 21);
             label4.TabIndex = 9;
@@ -120,9 +123,9 @@
             // 
             button_StartCopy.Enabled = false;
             button_StartCopy.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button_StartCopy.Location = new Point(595, 71);
+            button_StartCopy.Location = new Point(639, 71);
             button_StartCopy.Name = "button_StartCopy";
-            button_StartCopy.Size = new Size(262, 36);
+            button_StartCopy.Size = new Size(293, 36);
             button_StartCopy.TabIndex = 10;
             button_StartCopy.Text = "Swap Files";
             button_StartCopy.UseVisualStyleBackColor = true;
@@ -130,9 +133,9 @@
             // 
             // progressBar
             // 
-            progressBar.Location = new Point(12, 128);
+            progressBar.Location = new Point(99, 128);
             progressBar.Name = "progressBar";
-            progressBar.Size = new Size(845, 23);
+            progressBar.Size = new Size(833, 23);
             progressBar.Step = 1;
             progressBar.TabIndex = 11;
             // 
@@ -149,15 +152,40 @@
             // 
             labelProgress.Location = new Point(12, 110);
             labelProgress.Name = "labelProgress";
-            labelProgress.Size = new Size(845, 15);
+            labelProgress.Size = new Size(920, 15);
             labelProgress.TabIndex = 12;
             labelProgress.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // checkBox_AutoClose
+            // 
+            checkBox_AutoClose.AutoSize = true;
+            checkBox_AutoClose.Location = new Point(12, 132);
+            checkBox_AutoClose.Name = "checkBox_AutoClose";
+            checkBox_AutoClose.Size = new Size(81, 19);
+            checkBox_AutoClose.TabIndex = 13;
+            checkBox_AutoClose.Text = "AutoClose";
+            checkBox_AutoClose.UseVisualStyleBackColor = true;
+            checkBox_AutoClose.CheckedChanged += checkBox_AutoClose_CheckedChanged;
+            // 
+            // label_PhotoAmount
+            // 
+            label_PhotoAmount.BorderStyle = BorderStyle.FixedSingle;
+            label_PhotoAmount.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label_PhotoAmount.ForeColor = Color.Green;
+            label_PhotoAmount.Location = new Point(536, 71);
+            label_PhotoAmount.Name = "label_PhotoAmount";
+            label_PhotoAmount.Size = new Size(68, 36);
+            label_PhotoAmount.TabIndex = 14;
+            label_PhotoAmount.Text = "50";
+            label_PhotoAmount.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(869, 161);
+            ClientSize = new Size(944, 161);
+            Controls.Add(label_PhotoAmount);
+            Controls.Add(checkBox_AutoClose);
             Controls.Add(labelProgress);
             Controls.Add(progressBar);
             Controls.Add(button_StartCopy);
@@ -170,10 +198,12 @@
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
             Name = "FormMain";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "File-Копір";
             Load += FormMain_Load;
+            KeyDown += FormMain_KeyDown;
             ((System.ComponentModel.ISupportInitialize)numericUpDownStartIndex).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownEndIndex).EndInit();
             ResumeLayout(false);
@@ -194,5 +224,7 @@
         private FolderBrowserDialog folderBrowserDialogSource;
         private FolderBrowserDialog folderBrowserDialogDestanation;
         private Label labelProgress;
+        private CheckBox checkBox_AutoClose;
+        private Label label_PhotoAmount;
     }
 }

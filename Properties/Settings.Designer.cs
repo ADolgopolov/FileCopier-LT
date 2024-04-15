@@ -22,17 +22,5 @@ namespace FileCopier.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SourceBaseFolder {
-            get {
-                return ((string)(this["SourceBaseFolder"]));
-            }
-            set {
-                this["SourceBaseFolder"] = value;
-            }
-        }
     }
 }
