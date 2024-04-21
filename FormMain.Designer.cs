@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             label1 = new Label();
             textBoxSourceDir = new TextBox();
@@ -43,6 +44,7 @@
             labelProgress = new Label();
             checkBox_AutoClose = new CheckBox();
             label_PhotoAmount = new Label();
+            toolTip = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)numericUpDownStartIndex).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownEndIndex).BeginInit();
             SuspendLayout();
@@ -226,5 +228,6 @@
         private Label labelProgress;
         private CheckBox checkBox_AutoClose;
         private Label label_PhotoAmount;
+        private ToolTip toolTip;
     }
 }

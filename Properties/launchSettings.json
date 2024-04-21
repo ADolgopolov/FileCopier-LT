@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FileCopier": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\GDrive\\My Drive\\Sources\\SmithsFalls\\Photos\\Run 6\" \"100\""
+    }
+  }
+}

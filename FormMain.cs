@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
 using System.Configuration;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FileCopier
 {
@@ -14,6 +16,22 @@ namespace FileCopier
         public FormMain()
         {
             InitializeComponent();
+        }
+
+        public FormMain(string folder, string startNumber)
+        {
+            InitializeComponent();
+
+            if (Directory.Exists(folder))
+            {
+                userSettings.SourceBaseFolder = folder;
+                userSettings.SaveSettings();
+            }
+
+            if (decimal.TryParse(startNumber, out decimal dd))
+            {
+                numericUpDownStartIndex.Value = dd;
+            }
         }
 
         private async void Button_StartCopy_Click(object sender, EventArgs e)
@@ -91,6 +109,9 @@ namespace FileCopier
             textBoxSourceDir.Text = userSettings.SourceBaseFolder;
             button_StartCopy.Enabled = true;
             checkBox_AutoClose.Checked = userSettings.isAutoCloseProgram;
+
+            toolTip.SetToolTip(numericUpDownStartIndex, "Ctrl + V");
+            toolTip.SetToolTip(numericUpDownEndIndex, "Ctrl + Shift + V");
         }
 
         private void checkBox_AutoClose_CheckedChanged(object sender, EventArgs e)
@@ -119,11 +140,34 @@ namespace FileCopier
                 {
                     if (decimal.TryParse(Path.GetFileNameWithoutExtension(Clipboard.GetText()), out decimal dd))
                     {
-                        if(e.Shift) numericUpDownEndIndex.Value = dd;
+                        if (e.Shift) numericUpDownEndIndex.Value = dd;
                         else numericUpDownStartIndex.Value = dd;
                     }
                 }
-                else MessageBox.Show("Буфер не місить назву JPG файлу: \n\n" + Clipboard.GetText(), "Не відповідність вводу.", MessageBoxButtons.OK);
+                else 
+                {
+                    if (Clipboard.ContainsText())
+                    {
+                        string input = Clipboard.GetText(); // "SmithsFalls|SmithsFalls-4|Run 25|28";
+                        string[] parts = input.Split('|'); // Розділити рядок по символу "|"
+                        string lastPart = parts[parts.Length - 1]; // Взяти останній елемент масиву (останнє число)
+                        lastPart = Regex.Match(lastPart, @"\d+").Value; // Витягти всі цифри з останнього елементу
+                        decimal result;
+                        if (decimal.TryParse(lastPart, out result))
+                        {
+                            // Вдалося перетворити
+                            if (e.Shift) numericUpDownEndIndex.Value = result;
+                            else numericUpDownStartIndex.Value = result;
+                        }
+                        else
+                        {
+                            // Не вдалося перетворити
+                            Console.WriteLine("Не вдалося розпізнати останні цифри рядка в число.");
+                            MessageBox.Show("Не вдалося розпізнати останні цифри рядка в число: \n\n" + Clipboard.GetText(), "Не відповідність вводу.", MessageBoxButtons.OK);
+                        }
+                    }
+                    else MessageBox.Show("Буфер не місить назву JPG файлу чи \"Photo NO\": \n\n" + Clipboard.GetText(), "Не відповідність вводу.", MessageBoxButtons.OK);
+                }
             }
         }
     }
