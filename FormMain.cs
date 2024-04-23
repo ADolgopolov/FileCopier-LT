@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using FileCopier.FormByList;
+using Microsoft.Win32;
 using System.Configuration;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -12,6 +13,8 @@ namespace FileCopier
     {
         // Зчитування налаштувань
         UserSettings userSettings = new UserSettings();
+
+        FormByList.FormByList formByList = new FormByList.FormByList();
 
         public FormMain()
         {
@@ -36,26 +39,15 @@ namespace FileCopier
 
         private async void Button_StartCopy_Click(object sender, EventArgs e)
         {
-            if (numericUpDownEndIndex.Value < numericUpDownStartIndex.Value)
+            if (checkBox_SwapByList.Checked && formByList.photoListNumbers.Count > 0)
             {
-                // Міняємо значення місцями
-                progressBar.Minimum = (int)numericUpDownEndIndex.Value;
-                progressBar.Maximum = (int)numericUpDownStartIndex.Value;
-            }
-            else
-            {
-                progressBar.Minimum = (int)numericUpDownStartIndex.Value;
-                progressBar.Maximum = (int)numericUpDownEndIndex.Value; ;
-            }
-
-            if (Math.Abs(numericUpDownEndIndex.Value - numericUpDownStartIndex.Value) < 5000)
-            {
-
+                progressBar.Minimum = 0;
+                progressBar.Maximum = formByList.photoListNumbers.Count;
+                button_StartCopy.Enabled = false;
                 _ = new FileCopier();
-                await FileCopier.CopyFilesInRangeAsync(
+                await FileCopier.CopyFilesByListAsync(
                     textBoxSourceDir.Text,
-                    (int)numericUpDownStartIndex.Value,
-                    (int)numericUpDownEndIndex.Value,
+                    formByList.photoListNumbers,
                     progressBar,
                     labelProgress);
                 if (userSettings.isAutoCloseProgram)
@@ -65,11 +57,47 @@ namespace FileCopier
                 else
                 {
                     MessageBox.Show("Google Drive complete to swape files.", "Close this window...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    button_StartCopy.Enabled = true;
                 }
             }
             else
             {
-                MessageBox.Show("Reduce the photo range. And try again.", "It will take a long time...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (numericUpDownEndIndex.Value < numericUpDownStartIndex.Value)
+                {
+                    // Міняємо значення місцями
+                    progressBar.Minimum = (int)numericUpDownEndIndex.Value;
+                    progressBar.Maximum = (int)numericUpDownStartIndex.Value;
+                }
+                else
+                {
+                    progressBar.Minimum = (int)numericUpDownStartIndex.Value;
+                    progressBar.Maximum = (int)numericUpDownEndIndex.Value; 
+                }
+
+                if (Math.Abs(numericUpDownEndIndex.Value - numericUpDownStartIndex.Value) < 5000)
+                {
+                    button_StartCopy.Enabled = false;
+                    _ = new FileCopier();
+                    await FileCopier.CopyFilesInRangeAsync(
+                        textBoxSourceDir.Text,
+                        (int)numericUpDownStartIndex.Value,
+                        (int)numericUpDownEndIndex.Value,
+                        progressBar,
+                        labelProgress);
+                    if (userSettings.isAutoCloseProgram)
+                    {
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Google Drive complete to swape files.", "Close this window...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        button_StartCopy.Enabled = true;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Reduce the photo range. And try again.", "It will take a long time...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
@@ -144,7 +172,7 @@ namespace FileCopier
                         else numericUpDownStartIndex.Value = dd;
                     }
                 }
-                else 
+                else
                 {
                     if (Clipboard.ContainsText())
                     {
@@ -168,6 +196,26 @@ namespace FileCopier
                     }
                     else MessageBox.Show("Буфер не місить назву JPG файлу чи \"Photo NO\": \n\n" + Clipboard.GetText(), "Не відповідність вводу.", MessageBoxButtons.OK);
                 }
+            }
+        }
+
+        private void button_ByList_Click(object sender, EventArgs e)
+        {
+            
+            formByList.ShowDialog();
+            if (formByList.photoListNumbers.Count > 0)
+            {
+                checkBox_SwapByList.Checked = true;
+                checkBox_SwapByList.Enabled = true;
+                numericUpDownStartIndex.Value = formByList.photoListNumbers[0];
+                numericUpDownEndIndex.Value = formByList.photoListNumbers[formByList.photoListNumbers.Count - 1];
+                label_PhotoAmount.Text = formByList.photoListNumbers.Count.ToString();
+            }
+            else
+            {
+                label_PhotoAmount.Text = "000";
+                checkBox_SwapByList.Checked = false;
+                checkBox_SwapByList.Enabled = false;
             }
         }
     }

@@ -45,6 +45,8 @@
             checkBox_AutoClose = new CheckBox();
             label_PhotoAmount = new Label();
             toolTip = new ToolTip(components);
+            button_ByList = new Button();
+            checkBox_SwapByList = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)numericUpDownStartIndex).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDownEndIndex).BeginInit();
             SuspendLayout();
@@ -125,9 +127,9 @@
             // 
             button_StartCopy.Enabled = false;
             button_StartCopy.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button_StartCopy.Location = new Point(639, 71);
+            button_StartCopy.Location = new Point(765, 71);
             button_StartCopy.Name = "button_StartCopy";
-            button_StartCopy.Size = new Size(293, 36);
+            button_StartCopy.Size = new Size(167, 36);
             button_StartCopy.TabIndex = 10;
             button_StartCopy.Text = "Swap Files";
             button_StartCopy.UseVisualStyleBackColor = true;
@@ -181,11 +183,34 @@
             label_PhotoAmount.Text = "50";
             label_PhotoAmount.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // button_ByList
+            // 
+            button_ByList.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button_ByList.Location = new Point(654, 71);
+            button_ByList.Name = "button_ByList";
+            button_ByList.Size = new Size(104, 36);
+            button_ByList.TabIndex = 15;
+            button_ByList.Text = "By List";
+            button_ByList.UseVisualStyleBackColor = true;
+            button_ByList.Click += button_ByList_Click;
+            // 
+            // checkBox_SwapByList
+            // 
+            checkBox_SwapByList.AutoSize = true;
+            checkBox_SwapByList.Enabled = false;
+            checkBox_SwapByList.Location = new Point(633, 83);
+            checkBox_SwapByList.Name = "checkBox_SwapByList";
+            checkBox_SwapByList.Size = new Size(15, 14);
+            checkBox_SwapByList.TabIndex = 16;
+            checkBox_SwapByList.UseVisualStyleBackColor = true;
+            // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(944, 161);
+            Controls.Add(checkBox_SwapByList);
+            Controls.Add(button_ByList);
             Controls.Add(label_PhotoAmount);
             Controls.Add(checkBox_AutoClose);
             Controls.Add(labelProgress);
@@ -203,7 +228,7 @@
             KeyPreview = true;
             Name = "FormMain";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "File-Копір";
+            Text = "File-Копір (PoleProfiles Edition)";
             Load += FormMain_Load;
             KeyDown += FormMain_KeyDown;
             ((System.ComponentModel.ISupportInitialize)numericUpDownStartIndex).EndInit();
@@ -229,5 +254,7 @@
         private CheckBox checkBox_AutoClose;
         private Label label_PhotoAmount;
         private ToolTip toolTip;
+        private Button button_ByList;
+        private CheckBox checkBox_SwapByList;
     }
 }

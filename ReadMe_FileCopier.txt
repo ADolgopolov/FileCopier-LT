@@ -13,7 +13,7 @@
 5) Чекати не потрібно, можна продовжувати працювати. 
 
 
-Mаємо нову версію FileCopier (скачати тут: https://intetics.sharepoint.com/:u:/s/Planview/EWguvDuslrhGtD9Dlz_c9h8BVDgsvv1AXHxK2lrYpThKiw?e=nAPyKZ)
+Mаємо нову версію FileCopier (скачати тут: https://intetics.sharepoint.com/:f:/s/Planview/Ejk16WG2Y5tPuR4rw3vFSPQBg08a_3TdZSUO-uZ48lHOaQ?e=OMyeRs)
 
 Оновлення від 2024/04/15 включає наступні зміни:
 
