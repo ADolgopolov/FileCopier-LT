@@ -201,8 +201,25 @@ namespace FileCopier
 
         private void button_ByList_Click(object sender, EventArgs e)
         {
-            
+            formByList.baseFolder = Path.GetFileName(userSettings.SourceBaseFolder);
             formByList.ShowDialog();
+            if (formByList.photosIgnored > 0)
+            {
+                if (formByList.photoListNumbers.Count > 0)
+                {
+                    MessageBox.Show(formByList.photosIgnored + " номерів буде проігноровано, оскільки не належить до заданого " + Path.GetFileName(userSettings.SourceBaseFolder), 
+                        "Попередження", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show("Весь список буде проігноровано, оскільки не відносяться  до заданого " + Path.GetFileName(userSettings.SourceBaseFolder),
+                        "Попередження",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+            }
             if (formByList.photoListNumbers.Count > 0)
             {
                 checkBox_SwapByList.Checked = true;

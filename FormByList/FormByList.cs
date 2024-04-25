@@ -14,6 +14,10 @@ namespace FileCopier.FormByList
 {
     public partial class FormByList : Form
     {
+        public string baseFolder = String.Empty;
+
+        public int photosIgnored = 0;
+
         public List<decimal> photoListNumbers = new List<decimal>();
         public FormByList()
         {
@@ -26,26 +30,36 @@ namespace FileCopier.FormByList
             string[] lines = textBoxForList.Lines;
             decimal number;
             int around = (int)numericShiftAround.Value;
-            
+
             this.photoListNumbers.Clear();
+            photosIgnored = 0;
 
             // Проходження по всіх рядках
             foreach (string line in lines)
             {
-                number = PhotoNumberByString.ParseString(line);
-                if (number > 0)
+                if (line.Contains(baseFolder))
                 {
-                    // Додавання сусідніх чисел
-                    for (int i = (int)number - around; i <= number + around; i++)
+                    number = PhotoNumberByString.ParseString(line);
+                    if (number > 0)
                     {
-                        if (i > 0)
+                        // Додавання сусідніх чисел
+                        for (int i = (int)number - around; i <= number + around; i++)
                         {
-                            this.photoListNumbers.Add(i);
+                            if (i > 0)
+                            {
+                                this.photoListNumbers.Add(i);
+                            }
                         }
                     }
                 }
+                else { photosIgnored++; }
             }
             this.Close();
+        }
+
+        private void FormByList_Load(object sender, EventArgs e)
+        {
+            this.label_Help.Text = "Можна вставити з колонки \"New link Photo\" або \"Photo NO\" по " + this.baseFolder;
         }
     }
 }
